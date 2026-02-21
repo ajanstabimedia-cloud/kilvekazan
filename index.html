@@ -1287,9 +1287,12 @@
             snap.forEach(d => { 
                 const u = d.data(); 
                 
-                // ÖĞRETMEN FİLTRESİ
-                if (window.currentTeacherRole === 'teacher' && (!window.currentTeacherClasses || !window.currentTeacherClasses.includes(u.classNum))) {
-                    return; // Bu öğrenci öğretmenin sınıfında değilse atla
+              // ÖĞRETMEN FİLTRESİ (Tüm formatlar: 5/A, 5-A, 5A, 5 a eşitlendi)
+                if (window.currentTeacherRole === 'teacher') {
+                    const ogrSinifi = (u.classNum || "").toString().replace(/[\s\/\-\.]/g, '').toUpperCase();
+                    if (!window.currentTeacherClasses || !window.currentTeacherClasses.includes(ogrSinifi)) {
+                        return; // Eşleşmiyorsa atla
+                    }
                 }
 
                 if(u.status === 'pending') { 
